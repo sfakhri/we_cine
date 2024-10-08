@@ -1,0 +1,22 @@
+.banner {
+    background-color: #f8f9fa;
+    padding: 50px;
+    text-align: center;
+}
+.sidebar {
+    background-color: #e9ecef;
+    padding: 20px;
+}
+.title-website{
+    text-decoration: underline;
+    color: #5a6178;
+
+}
+
+/**
+Ratings section
+*/
+.star-ratings{
+    color: #1e83f6;
+    font-size: 24px;
+}

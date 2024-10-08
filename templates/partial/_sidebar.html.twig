@@ -1,0 +1,12 @@
+<!-- Left Sidebar -->
+<div class="col-md-3 sidebar">
+    <h4>Catégories</h4>
+    {% for categorie in  categories %}
+        <div class="form-check">
+            <input class="form-check-input jqCategorie" type="checkbox" value="{{ categorie.id }}"
+                    {% if categorie.id in searchCaterories %} checked {% endif %}
+            />
+            <label class="form-check-label" for="flexCheckDefault">{{ categorie.name }}</label>
+        </div>
+    {% endfor %}
+</div>

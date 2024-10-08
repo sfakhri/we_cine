@@ -1,0 +1,23 @@
+<header class="bg-light py-3">
+    <div class="container">
+        <div class="row align-items-center">
+            <!-- Logo (Gauche) -->
+            <div class="col-md-6">
+                <a href="{{ path('app_home') }}" class="navbar-brand title-website">
+                    A propos de We Movies
+                </a>
+            </div>
+
+            <!-- Search Bar (Droite) -->
+            <div class="col-md-6">
+                {{ form_start(form, {'method': 'POST', 'attr': {'id' : 'form_filter', 'name': 'form_filter', 'class': 'd-flex justify-content-end'}}) }}
+                {{ form_row(form.search_suggestions) }}
+                <ul id="suggestions" class="list-group mt-2 position-absolute"
+                    style="z-index: 1000; display: none;"></ul>
+                &nbsp;<button class="btn btn-outline-primary" type="submit">Search</button>
+                {{ form_end(form) }}
+            </div>
+
+        </div>
+    </div>
+</header>

@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}We Movies{% endblock %}
+
+{% block header %}
+    {% include 'partial/_header.html.twig' with {'form': form} %}
+{% endblock %}
+{% block banner %}
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-12" style="">
+                <div class="card bg-dark text-white">
+                    <img src="https://image.tmdb.org/t/p/w300/lgkPzcOSnTvjeMnuFzozRO5HHw1.jpg" class="card-img"
+                         alt="Stony Beach"/>
+                    <div class="card-img-bottom">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img src="https://image.tmdb.org/t/p/w92/lgkPzcOSnTvjeMnuFzozRO5HHw1.jpg"
+                                     class="card-img" alt="Stony Beach"/>
+                            </div>
+                            <div class="col-md-5">
+                                <h5 class="card-title">Le Fondateur</h5>
+                                <p class="card-text">Le Fondateur - Bande Annonce</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}
+{% block body %}
+    {% include 'partial/_sidebar.html.twig' with {'categories': categories, 'searchCaterories': seachCategories} %}
+    <!-- Right Content Area -->
+    <div class="col-md-9">
+        <!-- Film Item -->
+        {% for movie in  movies %}
+            {% set starsRate =  movie.vote_average//2 %}
+            <div class="card mb-3" style="">
+                <div class="row g-0">
+                    <div class="col-md-4 align-middle">
+                        {% set imagePath = baseUrlImages %}
+                        <img
+                                src="{{ baseUrlImages ~  'w154/' ~ movie.poster_path }}"
+                                alt="Trendy Pants and Shoes"
+                                class="img-fluid rounded-start "
+                        />
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ movie.title }}
+
+                                <span class="star-ratings">
+                                {{ starsRate|rating(5) }}
+                            </span>
+                                <small class="text-muted">({{ movie.vote_count }} votes)</small></h5>
+                            <p class="card-text">
+                                <small class="text-muted">{{ movie.release_date|date('Y') }}</small>
+                            </p>
+                            <p class="card-text">{{ movie.overview }}</p>
+                            <p class="card-text">
+                            <div class="d-flex justify-content-end">
+                                <a href="#" class="btn btn-primary jqLinkMovie" data-movie-id="{{ movie.id }}">Lire le détails</a>
+                            </div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <!-- END Film Item -->
+
+
+    </div>
+
+
+    <!-- Structure de la modale Bootstrap -->
+    <div class="modal fade" id="myModalMovie" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 80%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title jqModalTitle" id="myModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Contenu qui sera chargé par AJAX -->
+                    <div id="modalContent" class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-10 jqYoutube">
+                                <iframe width="100%" height="350" src="https://www.youtube.com/embed/"></iframe>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-10 jqMovieTitle">Titre Film</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-10">
+                                        <span class="jqMovieGenre">Film : categorie1,categorie2</span>
+                                        <span class="jqMovieRating">{{ 4|rating(5) }}</span>
+                                        <span class="jqMovieRatingAverage">4.4</span>
+                                        <span class="jqMovieRatingUsers">pour 1520 utilisateurs</span>
+                            </div>
+                        </div>
+                        <h6 class="jqMovieTitle"></h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
