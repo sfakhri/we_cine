@@ -29,27 +29,41 @@ $(function () {
         // Star Rating
         $('#myModalMovie .jqMovieRating').html(starRatingFilm)
 
+
         // Charge le contenu via AJAX
+        // const urlAjax = $('#jqUrlAjaxMovie').val()
+        // console.log(urlAjax);
         $.ajax({
-            url: 'https://127.0.0.1:8002/movieitem?item='+movieId,  // Remplace avec ton URL
+            url: $('#jqUrlAjaxMovie').val()+'?item='+movieId,  // Remplace avec ton URL
             type: 'GET',
             success: function (data) {
+
                 let dataMovie = data.data;
                 let video = data.video;
-                let vote_average = data.vote_average;
-                vote_average = Math.floor(vote_average/2);
-                let video_genres = '';
-                console.log(dataMovie.genres);
-                $.each(dataMovie.genres, function(index, value ) {
-                    // Transformation du tableau
-                    console.log(value.name);
-                    video_genres += value.name+', ';
-                });
-                if(video_genres.length > 0) video_genres = video_genres.slice(0,-1);
+                let vote_average = dataMovie.vote_average;
+                vote_average = vote_average / 2;
+                // Afficher le résultat avec 1 chiffre après la virgule
+                vote_average = vote_average.toFixed(1);
+               $.each(video, function(index, value ) {
+               // Transformation du tableau
+                            if(value.site === 'YouTube' && value.key!='')
+                            {
+                                $('.jqYoutube').html('<iframe width="100%" height="350" src="https://www.youtube.com/embed/'+value.key+'"></iframe>')
+                                return false;
+                            }
+
+                            // video_genres += value.name+', ';
+                        });
+                // console.log(video.length);
+                //
+                // if(video.length > 0) {
+                //  if()
+                // }
+
                 $('.jqMovieTitle').html(dataMovie.original_title+' Bande Annonce');
-                $('.jqMovieRatingUsers').html(vote_average);
-                $('.jqMovieRatingUsers').html('pour '+dataMovie.vote_count+' utilisateurs')
-                $('.jqMovieGenre').html('Film: '+dataMovie.original_title)
+                $('.jqMovieRatingAverage').html(vote_average);
+                $('.jqMovieRatingUsers').html('pour '+dataMovie.vote_count+' utilisateurs');
+                $('.jqMovieGenre').html('Film: '+dataMovie.original_title);
 
             },
             error: function () {
