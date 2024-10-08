@@ -30,13 +30,11 @@ abstract class CallApi
         $options['auth_bearer'] = $this->auth_bearer;
         if(count($query) > 0)
             $options['query'] = $query;
-//        dump($options);
         $response = $this->client->request(
             'GET',
             $this->apiUrl . $apiPartial,
             $options
         );
-//        dump($response->getStatusCode(), $response->getInfo());
         if ($response->getStatusCode() === Response::HTTP_OK) {
             return $response->toArray();
         }

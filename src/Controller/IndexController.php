@@ -34,12 +34,11 @@ class IndexController extends AbstractController
         } else if (!empty($arr_searchCategories)) {
             $listMovies = $movies->getMoviesByCategory($arr_searchCategories);
         } else {
-
             $listMovies = $movies->getPopularMovies();
         }
 
-
         $conf->generateConfigurations();
+
         return $this->render('index/index.html.twig', [
             'categories' => $categories->getCategories(),
             'movies' => $listMovies,
