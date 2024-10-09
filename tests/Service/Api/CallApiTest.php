@@ -1,57 +1,78 @@
 <?php
-// tests/Service/Api/CallApiTest.php
+
 namespace App\Tests\Service\Api;
 
 use App\Service\Api\CallApi;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use PHPUnit\Framework\TestCase;
 
 class CallApiTest extends TestCase
 {
-    private $httpClient;
-    private $callApi;
-
-    protected function setUp(): void
+    public function testGenerateReturnsExpectedArray()
     {
-// Mock le client HTTP
-        $this->httpClient = $this->createMock(HttpClientInterface::class);
+        // Mock des dépendances
+        $httpClient = $this->createMock(HttpClientInterface::class);
 
-// Initialiser l'instance de CallApi avec le mock
-        $this->callApi = new class('http://api.example.com', 'fakeBearer', 'fakeApiKey', $this->httpClient) extends CallApi {
-        };
-    }
+        // Mock de la réponse HTTP
+        $response = $this->createMock(ResponseInterface::class);
+        $response->expects(static::once())
+            ->method('getStatusCode')
+            ->willReturn(200);
 
-    public function testGenerateReturnsArrayOnSuccess()
-    {
-// Créer un mock pour la réponse
-        $responseMock = $this->createMock(ResponseInterface::class);
-        $responseMock->method('getStatusCode')->willReturn(200);
-        $responseMock->method('toArray')->willReturn(['data' => 'value']);
+        $response->expects(static::once())
+            ->method('toArray')
+            ->willReturn(['data' => 'test data']);
 
-// Configurer le client HTTP pour renvoyer le mock de réponse
-        $this->httpClient->method('request')->willReturn($responseMock);
+        // Configuration du client HTTP pour retourner la réponse mockée
+        $httpClient->expects(static::once())
+            ->method('request')
+            ->willReturn($response);
 
-// Appeler la méthode generate
-        $result = $this->callApi->generate(['queryParam' => 'value'], '/partial');
+        // Instanciation de l'objet CallApi
+        $callApi = $this->getMockForAbstractClass(
+            CallApi::class,
+            ['https://example.com', 'test_bearer_token', 'test_api_key', $httpClient]
+        );
 
-// Assertions
-        $this->assertEquals(['data' => 'value'], $result);
+        // Appel de la méthode à tester
+        $result = $callApi->generate(['param1' => 'value1'], '/endpoint');
+
+        // Assertions
+        static::assertIsArray($result);
+        static::assertEquals(['data' => 'test data'], $result);
     }
 
     public function testGenerateReturnsEmptyArrayOnError()
     {
-// Créer un mock pour la réponse
-        $responseMock = $this->createMock(ResponseInterface::class);
-        $responseMock->method('getStatusCode')->willReturn(404);
+        // Mock des dépendances
+        $httpClient = $this->createMock(HttpClientInterface::class);
 
-// Configurer le client HTTP pour renvoyer le mock de réponse
-        $this->httpClient->method('request')->willReturn($responseMock);
+        // Mock de la réponse HTTP avec un code 404 (erreur)
+        $response = $this->createMock(ResponseInterface::class);
+        $response->expects(static::once())
+            ->method('getStatusCode')
+            ->willReturn(404);
 
-// Appeler la méthode generate
-        $result = $this->callApi->generate([], '/partial');
+        $response->expects(static::never())
+            ->method('toArray');
 
-// Assertions
-        $this->assertEquals([], $result);
+        // Configuration du client HTTP pour retourner la réponse mockée
+        $httpClient->expects(static::once())
+            ->method('request')
+            ->willReturn($response);
+
+        // Instanciation de l'objet CallApi
+        $callApi = $this->getMockForAbstractClass(
+            CallApi::class,
+            ['https://example.com', 'test_bearer_token', 'test_api_key', $httpClient]
+        );
+
+        // Appel de la méthode à tester
+        $result = $callApi->generate([], '/endpoint');
+
+        // Assertions
+        static::assertEmpty($result);
     }
 }
