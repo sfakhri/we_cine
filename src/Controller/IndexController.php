@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends AbstractController
 {
-   /**
+    /**
      * @Route("/", name="app_home")
      */
     public function index(Request $request, Categories $categories, Movies $movies, Configuration $conf): Response
@@ -50,31 +50,29 @@ class IndexController extends AbstractController
         ]);
     }
 
-  /**
-     * @Route("/autocomplete", name="app_search_autocomplete")
+
+    /**
+     * @Route("/searchmovie", name="app_search_autocomplete", methods={"GET"})
      */
     public function autocomplete(Request $request, Movies $movie): Response
     {
-
         $search = $request->query->get('term', '');
         $movies = $movie->getMoviesSearch($search);
         $movies = array_column(array_slice($movies, 0, 5), 'title');
         return $this->json($movies);
     }
 
-  /**
-     * @Route("/movieitem", name="app_movieitem")
+    /**
+     * @Route("/movieitem", name="app_movieitem", methods={"GET"})
      */
     public function movieDetails(Request $request, Movies $movie): Response
     {
         $search = $request->query->get('item', '');
-        $movies= ["data"=> [], "video"=>[]];
+        $movies = ["data" => [], "video" => []];
 
         $data = $movie->getMovieDetails($search);
-        if(is_array($data))
-        {
-            if(array_key_exists('videos', $data)    && array_key_exists('results', $data['videos']))
-            {
+        if (is_array($data)) {
+            if (array_key_exists('videos', $data) && array_key_exists('results', $data['videos'])) {
                 $movies['video'] = $data['videos']['results'];
                 unset($data['videos']);
             }
