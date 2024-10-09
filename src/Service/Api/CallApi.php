@@ -12,7 +12,7 @@ abstract class CallApi
     private $apiKey;
     private $auth_bearer;
 
-    public function __construct($apiUrl, $apiBearer, $apiKey, HttpClientInterface $client,)
+    public function __construct($apiUrl, $apiBearer, $apiKey, HttpClientInterface $client)
     {
         $this->client = $client;
         $this->apiUrl = $apiUrl;

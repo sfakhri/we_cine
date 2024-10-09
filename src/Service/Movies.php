@@ -6,6 +6,10 @@ use App\Service\Api\CallApi;
 
 class Movies extends CallApi
 {
+    /**
+     * Permet de recuerer les films qui sont affichés dans la home page
+     * @return array|mixed
+     */
     public function getPopularMovies()
     {
         $query = [
@@ -21,6 +25,11 @@ class Movies extends CallApi
         return [];
     }
 
+    /**
+     * Liste de film par catégorie
+     * @param array|null $categoryId
+     * @return array|mixed
+     */
     public function getMoviesByCategory(?array $categoryId = [])
     {
         $query = [
@@ -32,12 +41,16 @@ class Movies extends CallApi
         $apiPartial = "/discover/movie";
         $data = $this->generate($query, $apiPartial);
         if (!empty($data) && is_array($data) && array_key_exists('results', $data)) {
-            dump($data);
             return $data['results'];
         }
         return [];
     }
 
+    /**
+     * Detail d'un film donné
+     * @param int|null $movieId
+     * @return array
+     */
     public function getMovieDetails(?int $movieId = 0)
     {
         $query = ["api_key" => $this->getApiKey(), "append_to_response"=> "videos"];
@@ -49,6 +62,11 @@ class Movies extends CallApi
         return [];
     }
 
+    /**
+     * Récupere la liste de videos disponible pour un film donné
+     * @param string|null $movie
+     * @return array|mixed
+     */
     public function getMoviesSearch(?string $movie = '')
     {
         $query = [

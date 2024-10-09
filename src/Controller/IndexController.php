@@ -13,7 +13,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
+   /**
+     * @Route("/", name="app_home")
+     */
     public function index(Request $request, Categories $categories, Movies $movies, Configuration $conf): Response
     {
         $listMovies = [];
@@ -48,7 +50,9 @@ class IndexController extends AbstractController
         ]);
     }
 
-    #[Route('/autocomplete', name: 'app_search_autocomplete')]
+  /**
+     * @Route("/autocomplete", name="app_search_autocomplete")
+     */
     public function autocomplete(Request $request, Movies $movie): Response
     {
 
@@ -58,7 +62,9 @@ class IndexController extends AbstractController
         return $this->json($movies);
     }
 
-    #[Route('/movieitem', name: 'app_movieitem')]
+  /**
+     * @Route("/movieitem", name="app_movieitem")
+     */
     public function movieDetails(Request $request, Movies $movie): Response
     {
         $search = $request->query->get('item', '');
