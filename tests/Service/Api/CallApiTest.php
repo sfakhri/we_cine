@@ -10,7 +10,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class CallApiTest extends TestCase
 {
-    public function testGenerateReturnsExpectedArray()
+    public function testGetWithStatusCodeOk()
     {
         // Mock des dépendances
         $httpClient = $this->createMock(HttpClientInterface::class);
@@ -44,7 +44,7 @@ class CallApiTest extends TestCase
         static::assertEquals(['data' => 'test data'], $result);
     }
 
-    public function testGenerateReturnsEmptyArrayOnError()
+    public function testGetWithStatusCodeKo()
     {
         // Mock des dépendances
         $httpClient = $this->createMock(HttpClientInterface::class);
